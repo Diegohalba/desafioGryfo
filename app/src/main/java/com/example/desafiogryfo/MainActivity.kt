@@ -20,8 +20,6 @@ class MainActivity : ComponentActivity() {
 
             cameraProviderResult.launch(android.Manifest.permission.CAMERA)
         }
-
-
     }
 
     private val cameraProviderResult =

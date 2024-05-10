@@ -33,7 +33,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-
 class CameraPreviewBackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraPreviewBackBinding
 
@@ -59,30 +58,41 @@ class CameraPreviewBackActivity : AppCompatActivity() {
         startCamera()
 
         binding.btnTakeSecondPhoto.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
                 backTakePhoto()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     blinkPreview()
                 }
 
-                val base64Image = convertImageToBase64(saveBackImg)
 
-                withContext(Dispatchers.Main) {
-                    binding.root.postDelayed({
-                        val image = Image()
 
-                    image.document_img = base64Image
+                binding.root.postDelayed({
+                    CoroutineScope(Dispatchers.IO).launch {
+                    val base64ImageBack = convertImageToBase64(saveBackImg)
+                    val image = Image()
+                    image.document_img = base64ImageBack
 
                     val gson = Gson()
                     val imageJson = gson.toJson(image)
 
                     val network = NetworkUtils()
-                    network.post(imageJson)
 
-                    println("BASE64=${image.document_img}")
-                    }, 1000)
-                }
-            }
+                    println("BASE64 $image")
+                        val response = network.post(imageJson)
+                        // Handle the response from the server (optional)
+                        if (response.isSuccessful) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(binding.root.context, "Imagem enviada com sucesso!", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Log.e("CameraPreview", "Erro ao enviar imagem: ${response.code}")
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(binding.root.context, "Erro ao enviar imagem!", Toast.LENGTH_SHORT).show()
+
+                            }
+                        }
+
+                    }
+                 }, 1000)
         }
 
     }
@@ -122,7 +132,7 @@ class CameraPreviewBackActivity : AppCompatActivity() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         Log.i("CameraPreview", "A imagem foi salva na pasta: ${fileBack.toUri()}")
-                        Snackbar.make(binding.root, "Foto salva com sucesso.", Snackbar.LENGTH_INDEFINITE).show()
+                        Snackbar.make(binding.root, "Foto salva com sucesso.", Snackbar.LENGTH_SHORT).show()
 
                     }
 

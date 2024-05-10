@@ -65,6 +65,8 @@ class CameraPreviewActivity : AppCompatActivity() {
                 val base64Image = convertImageToBase64(saveFrontImg)
                 val image = Image()
                 image.face_img = base64Image
+
+
             }, 1000)
 
         }
@@ -111,6 +113,7 @@ class CameraPreviewActivity : AppCompatActivity() {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         Log.i("CameraPreview", "A imagem foi salva na pasta: ${fileFront.toUri()}")
                         Snackbar.make(binding.root, "Foto salva com sucesso.", Snackbar.LENGTH_SHORT).show()
+
 
                     }
 

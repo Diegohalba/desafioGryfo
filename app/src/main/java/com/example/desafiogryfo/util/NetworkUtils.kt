@@ -6,23 +6,27 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 
 
 class NetworkUtils {
-    fun post (json: String) : String{
+    fun post (json: String) : Response {
+
+        val client = OkHttpClient()
         val URL = "https://api.gryfo.com.br/face_match"
 
         val headerHttp = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-        val client = OkHttpClient()
+        val body = RequestBody.create(headerHttp, json)
 
-        val body = json.toRequestBody(headerHttp)
+        val request = Request.Builder()
+            .url(URL)
+            .post(body)
+            .build()
 
-        val request = Request.Builder().url(URL).post(body).build()
+        return client.newCall(request).execute()
 
-        val response = client.newCall(request).execute()
 
-        return response.body.toString()
     }
 
 }
