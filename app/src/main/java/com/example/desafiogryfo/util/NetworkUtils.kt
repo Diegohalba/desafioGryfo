@@ -1,0 +1,28 @@
+package com.example.desafiogryfo.util
+
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+
+
+class NetworkUtils {
+    fun post (json: String) : String{
+        val URL = "https://192.168.15.6:3000/desafiogryfo"
+
+        val headerHttp = "application/json; charset=utf-8".toMediaTypeOrNull()
+
+        val client = OkHttpClient()
+
+        val body = json.toRequestBody(headerHttp)
+
+        val request = Request.Builder().url(URL).post(body).build()
+
+        val response = client.newCall(request).execute()
+
+        return response.body.toString()
+    }
+
+}
