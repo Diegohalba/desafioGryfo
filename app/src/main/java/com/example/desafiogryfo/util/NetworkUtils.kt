@@ -10,7 +10,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 class NetworkUtils {
     fun post (json: String) : String{
-        val URL = "https://192.168.15.6:3000/desafiogryfo"
+        val URL = "https://api.gryfo.com.br/face_match"
 
         val headerHttp = "application/json; charset=utf-8".toMediaTypeOrNull()
 
