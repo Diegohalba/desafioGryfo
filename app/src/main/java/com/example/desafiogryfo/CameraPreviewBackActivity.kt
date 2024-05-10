@@ -90,7 +90,6 @@ class CameraPreviewBackActivity : AppCompatActivity() {
 
                             }
                         }
-
                     }
                  }, 1000)
         }
